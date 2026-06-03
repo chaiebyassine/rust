@@ -1,0 +1,345 @@
+{
+    "start_room": 0,
+    "rooms": [
+        {
+            "id": 0,
+            "name": "Place du village",
+            "description": "Une place pavée, au coeur d'un petit village. Une fontaine murmure au centre.",
+            "exits": { "north": 1, "east": 2, "south": 3 },
+            "items": [],
+            "npcs": ["marchand"],
+            "monsters": []
+        },
+        {
+            "id": 1,
+            "name": "Forêt sombre",
+            "description": "Les arbres sont si hauts qu'ils masquent presque le ciel. On entend des bruits étranges.",
+            "exits": { "south": 0, "north": 4, "east": 5 },
+            "items": ["potion"],
+            "monsters": ["gobelin", "loup"],
+            "npcs": []
+        },
+        {
+            "id": 2,
+            "name": "Forge",
+            "description": "Une forge bruyante. Le forgeron tape sur une enclume rougie.",
+            "exits": { "west": 0 },
+            "items": ["epee"],
+            "npcs": ["forgeron"],
+            "monsters": []
+        },
+        {
+            "id": 3,
+            "name": "Vieille auberge",
+            "description": "Une auberge chaleureuse, idéale pour se reposer.",
+            "exits": { "north": 0 },
+            "items": [],
+            "npcs": ["aubergiste"],
+            "monsters": []
+        },
+        {
+            "id": 4,
+            "name": "Caverne",
+            "description": "Une caverne humide. L'écho de tes pas se mélange à des grognements.",
+            "exits": { "south": 1, "north": 6 },
+            "items": ["tresor"],
+            "monsters": ["troll"],
+            "npcs": []
+        },
+        {
+            "id": 5,
+            "name": "Tour du mage",
+            "description": "Une haute tour aux murs couverts de runes. Un vieux sorcier feuillette un grimoire.",
+            "exits": { "west": 1 },
+            "items": [],
+            "npcs": ["sorcier"],
+            "monsters": []
+        },
+        {
+            "id": 6,
+            "name": "Galerie souterraine",
+            "description": "Des stalactites pendent du plafond. Des battements d'ailes résonnent dans l'obscurité.",
+            "exits": { "south": 4, "north": 7 },
+            "items": [],
+            "monsters": ["chauve_souris", "chauve_souris"],
+            "npcs": []
+        },
+        {
+            "id": 7,
+            "name": "Crypte oubliée",
+            "description": "Une crypte glaciale. Des squelettes patrouillent entre les tombes. Un esprit lumineux flotte près de l'autel.",
+            "exits": { "south": 6, "north": 8 },
+            "items": ["potion_grande"],
+            "monsters": ["squelette", "squelette"],
+            "npcs": ["esprit"]
+        },
+        {
+            "id": 8,
+            "name": "Antre du Dragon Noir",
+            "description": "Une caverne immense, jonchée d'ossements. Une chaleur étouffante émane des profondeurs. Le Dragon Noir te fixe de ses yeux rougeoyants.",
+            "exits": { "south": 7 },
+            "items": ["epee_runique"],
+            "monsters": ["dragon_noir"],
+            "npcs": []
+        }
+    ],
+    "items": [
+        {
+            "id": "potion",
+            "name": "Potion de soin",
+            "description": "Restaure 20 PV.",
+            "kind": "Consumable",
+            "value": 10,
+            "heal": 20,
+            "attack_bonus": 0
+        },
+        {
+            "id": "potion_grande",
+            "name": "Grande potion",
+            "description": "Restaure 60 PV.",
+            "kind": "Consumable",
+            "value": 30,
+            "heal": 60,
+            "attack_bonus": 0
+        },
+        {
+            "id": "epee",
+            "name": "Épée en fer",
+            "description": "Une bonne épée bien aiguisée.",
+            "kind": "Weapon",
+            "value": 50,
+            "heal": 0,
+            "attack_bonus": 5
+        },
+        {
+            "id": "epee_runique",
+            "name": "Épée runique",
+            "description": "Une lame gravée de runes anciennes, vibrant de puissance.",
+            "kind": "Weapon",
+            "value": 300,
+            "heal": 0,
+            "attack_bonus": 12
+        },
+        {
+            "id": "armure_cuir",
+            "name": "Armure de cuir",
+            "description": "Une armure souple, légère et discrète.",
+            "kind": "Armor",
+            "value": 40,
+            "heal": 0,
+            "attack_bonus": 0,
+            "defense_bonus": 3
+        },
+        {
+            "id": "armure_plates",
+            "name": "Armure de plates",
+            "description": "Une armure forgée par le maître forgeron du village.",
+            "kind": "Armor",
+            "value": 200,
+            "heal": 0,
+            "attack_bonus": 0,
+            "defense_bonus": 8
+        },
+        {
+            "id": "tresor",
+            "name": "Coffre au trésor",
+            "description": "Contient 100 pièces d'or.",
+            "kind": "Treasure",
+            "value": 100,
+            "heal": 0,
+            "attack_bonus": 0
+        },
+        {
+            "id": "griffe_loup",
+            "name": "Griffe de loup",
+            "description": "Une griffe acerée arrachée à un loup.",
+            "kind": "Material",
+            "value": 2,
+            "heal": 0,
+            "attack_bonus": 0
+        },
+        {
+            "id": "os",
+            "name": "Os de squelette",
+            "description": "Un os blanchi, parfait pour renforcer une armure.",
+            "kind": "Material",
+            "value": 1,
+            "heal": 0,
+            "attack_bonus": 0
+        },
+        {
+            "id": "aile_chauve_souris",
+            "name": "Aile de chauve-souris",
+            "description": "Une aile membraneuse encore frémissante.",
+            "kind": "Material",
+            "value": 3,
+            "heal": 0,
+            "attack_bonus": 0
+        },
+        {
+            "id": "croc_dragon",
+            "name": "Croc de dragon",
+            "description": "Une dent gigantesque qui vibre encore de magie.",
+            "kind": "Material",
+            "value": 50,
+            "heal": 0,
+            "attack_bonus": 0
+        }
+    ],
+    "npcs": [
+        {
+            "id": "marchand",
+            "name": "Marchand",
+            "dialogue": "Bienvenue ! Tape 'shop' pour voir mes marchandises.",
+            "shop": ["potion", "potion_grande", "epee", "armure_cuir"]
+        },
+        {
+            "id": "forgeron",
+            "name": "Forgeron",
+            "dialogue": "Une lame bien forgée vaut tout l'or du monde. J'ai du boulot pour toi : ramène-moi 2 gobelins.",
+            "shop": ["armure_plates"],
+            "quest": "chasse_gobelins"
+        },
+        {
+            "id": "aubergiste",
+            "name": "Aubergiste",
+            "dialogue": "Tape 'rest' pour dormir et récupérer tes PV (5 pièces d'or). Mes clients adorent les potions, ramène-m'en 2 !",
+            "shop": [],
+            "quest": "potions_pour_clients"
+        },
+        {
+            "id": "sorcier",
+            "name": "Sorcier",
+            "dialogue": "Je peux t'enseigner des sorts. Tape 'spells' puis 'learn <sort>' (30 or). Si tu veux prouver ta valeur, tue le troll de la caverne.",
+            "shop": [],
+            "quest": "tueur_de_troll"
+        },
+        {
+            "id": "esprit",
+            "name": "Esprit gardien",
+            "dialogue": "Aventurier... le Dragon Noir somnole au fond de la crypte. Terrasse-le et la paix reviendra sur ces terres.",
+            "shop": [],
+            "quest": "tueur_de_dragon"
+        }
+    ],
+    "monsters": [
+        {
+            "id": "gobelin",
+            "name": "Gobelin",
+            "hp": 20,
+            "attack": 4,
+            "xp": 10,
+            "gold": 5
+        },
+        {
+            "id": "loup",
+            "name": "Loup",
+            "hp": 15,
+            "attack": 6,
+            "xp": 8,
+            "gold": 2,
+            "drops": ["griffe_loup"]
+        },
+        {
+            "id": "troll",
+            "name": "Troll",
+            "hp": 50,
+            "attack": 10,
+            "xp": 30,
+            "gold": 25
+        },
+        {
+            "id": "chauve_souris",
+            "name": "Chauve-souris géante",
+            "hp": 12,
+            "attack": 5,
+            "xp": 12,
+            "gold": 3,
+            "drops": ["aile_chauve_souris"]
+        },
+        {
+            "id": "squelette",
+            "name": "Squelette",
+            "hp": 28,
+            "attack": 7,
+            "xp": 18,
+            "gold": 8,
+            "drops": ["os"]
+        },
+        {
+            "id": "dragon_noir",
+            "name": "Dragon Noir",
+            "hp": 150,
+            "attack": 18,
+            "xp": 250,
+            "gold": 500,
+            "drops": ["croc_dragon"]
+        }
+    ],
+    "quests": [
+        {
+            "id": "chasse_gobelins",
+            "title": "Chasse aux gobelins",
+            "description": "Tue 2 gobelins pour le forgeron.",
+            "objective": { "type": "Kill", "monster_id": "gobelin", "count": 2 },
+            "reward_gold": 40,
+            "reward_xp": 30
+        },
+        {
+            "id": "potions_pour_clients",
+            "title": "Potions pour les clients",
+            "description": "Rapporte 2 potions de soin à l'aubergiste.",
+            "objective": { "type": "Collect", "item_id": "potion", "count": 2 },
+            "reward_gold": 25,
+            "reward_xp": 20
+        },
+        {
+            "id": "tueur_de_troll",
+            "title": "Tueur de troll",
+            "description": "Tue le troll qui hante la caverne.",
+            "objective": { "type": "Kill", "monster_id": "troll", "count": 1 },
+            "reward_gold": 100,
+            "reward_xp": 80
+        },
+        {
+            "id": "tueur_de_dragon",
+            "title": "Tueur de dragon",
+            "description": "Terrasse le Dragon Noir au fond de la crypte.",
+            "objective": { "type": "Kill", "monster_id": "dragon_noir", "count": 1 },
+            "reward_gold": 1000,
+            "reward_xp": 500
+        }
+    ],
+    "recipes": [
+        {
+            "id": "potion_grande",
+            "name": "Grande potion",
+            "inputs": [
+                { "item_id": "potion", "count": 2 }
+            ],
+            "output_id": "potion_grande",
+            "output_count": 1
+        },
+        {
+            "id": "armure_plates",
+            "name": "Armure de plates",
+            "inputs": [
+                { "item_id": "armure_cuir", "count": 1 },
+                { "item_id": "os", "count": 3 }
+            ],
+            "output_id": "armure_plates",
+            "output_count": 1
+        },
+        {
+            "id": "epee_runique",
+            "name": "Épée runique",
+            "inputs": [
+                { "item_id": "epee", "count": 1 },
+                { "item_id": "croc_dragon", "count": 1 },
+                { "item_id": "aile_chauve_souris", "count": 2 }
+            ],
+            "output_id": "epee_runique",
+            "output_count": 1
+        }
+    ]
+}
