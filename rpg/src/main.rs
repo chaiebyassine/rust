@@ -1,7 +1,7 @@
 //! Point d'entrée du jeu.
 
-mod commands;
 mod combat;
+mod commands;
 mod entity;
 mod game;
 mod magic;

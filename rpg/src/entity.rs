@@ -3,6 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Trait commun à toute entité ayant des points de vie.
+#[allow(dead_code)]
 pub trait Vivant {
     fn hp(&self) -> i32;
     fn max_hp(&self) -> i32;
@@ -19,12 +20,14 @@ pub trait Vivant {
 }
 
 /// Trait pour les entités capables de combattre.
+#[allow(dead_code)]
 pub trait Combattant: Vivant {
     fn attaque(&self) -> i32;
     fn defense(&self) -> i32;
 }
 
 /// Trait pour tout objet identifiable du jeu (items, recettes...).
+#[allow(dead_code)]
 pub trait Objet {
     fn id(&self) -> &str;
     fn nom(&self) -> &str;

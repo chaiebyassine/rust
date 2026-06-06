@@ -6,17 +6,12 @@ use crate::entity::{Combattant, Item, Recipe, Vivant};
 use crate::quest::QuestProgress;
 
 /// Classe choisie en début de partie : oriente les stats de départ.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum Class {
+    #[default]
     Guerrier,
     Mage,
     Voleur,
-}
-
-impl Default for Class {
-    fn default() -> Self {
-        Class::Guerrier
-    }
 }
 
 impl Class {
@@ -77,7 +72,10 @@ impl Stats {
             self.mana = self.max_mana;
             self.force += 2;
             self.intelligence += 1;
-            println!(">> Niveau supérieur ! Tu es maintenant niveau {}.", self.level);
+            println!(
+                ">> Niveau supérieur ! Tu es maintenant niveau {}.",
+                self.level
+            );
         }
     }
 
@@ -207,18 +205,13 @@ impl Player {
 
     /// Dégât de base (force + bonus arme équipée).
     pub fn attack_damage(&self) -> i32 {
-        let weapon = self
-            .equipped_weapon
-            .as_ref()
-            .map_or(0, |w| w.attack_bonus);
+        let weapon = self.equipped_weapon.as_ref().map_or(0, |w| w.attack_bonus);
         self.stats.force as i32 + weapon
     }
 
     /// Réduction de dégâts apportée par l'armure équipée.
     pub fn defense(&self) -> i32 {
-        self.equipped_armor
-            .as_ref()
-            .map_or(0, |a| a.defense_bonus)
+        self.equipped_armor.as_ref().map_or(0, |a| a.defense_bonus)
     }
 
     pub fn show_status(&self) {
@@ -266,7 +259,10 @@ impl Player {
     }
 
     pub fn show_inventory(&self) {
-        if self.inventory.is_empty() && self.equipped_weapon.is_none() && self.equipped_armor.is_none() {
+        if self.inventory.is_empty()
+            && self.equipped_weapon.is_none()
+            && self.equipped_armor.is_none()
+        {
             println!("Inventaire vide.");
             return;
         }
@@ -287,8 +283,7 @@ impl Player {
     pub fn equip(&mut self, name: &str) {
         let needle = name.to_lowercase();
         let idx = self.inventory.iter().position(|it| {
-            it.name.to_lowercase().starts_with(&needle)
-                || it.id.to_lowercase().starts_with(&needle)
+            it.name.to_lowercase().starts_with(&needle) || it.id.to_lowercase().starts_with(&needle)
         });
         let i = match idx {
             Some(i) => i,
@@ -312,7 +307,10 @@ impl Player {
                     println!("Tu retires {}.", prev.name);
                     self.inventory.push(prev);
                 }
-                println!("Tu enfiles {} (+{} défense).", item.name, item.defense_bonus);
+                println!(
+                    "Tu enfiles {} (+{} défense).",
+                    item.name, item.defense_bonus
+                );
                 self.equipped_armor = Some(item);
             }
             _ => {
@@ -349,8 +347,7 @@ impl Player {
     pub fn use_item(&mut self, name: &str) {
         let needle = name.to_lowercase();
         let idx = self.inventory.iter().position(|it| {
-            it.name.to_lowercase().starts_with(&needle)
-                || it.id.to_lowercase().starts_with(&needle)
+            it.name.to_lowercase().starts_with(&needle) || it.id.to_lowercase().starts_with(&needle)
         });
         match idx {
             Some(i) => {
@@ -531,7 +528,10 @@ mod tests {
     fn class_from_input_accepte_plusieurs_formats() {
         assert!(matches!(Class::from_input("1"), Some(Class::Guerrier)));
         assert!(matches!(Class::from_input("g"), Some(Class::Guerrier)));
-        assert!(matches!(Class::from_input("Guerrier"), Some(Class::Guerrier)));
+        assert!(matches!(
+            Class::from_input("Guerrier"),
+            Some(Class::Guerrier)
+        ));
         assert!(matches!(Class::from_input("2"), Some(Class::Mage)));
         assert!(matches!(Class::from_input("mage"), Some(Class::Mage)));
         assert!(matches!(Class::from_input("v"), Some(Class::Voleur)));

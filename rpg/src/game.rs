@@ -6,8 +6,8 @@ use std::io::{self, Write};
 
 use serde::{Deserialize, Serialize};
 
-use crate::commands::{parse, Command};
 use crate::combat::fight;
+use crate::commands::{parse, Command};
 use crate::entity::effects_summary;
 use crate::magic::{cast_heal, cast_offensive, find_spell, roll_crit, spell_damage, SPELLS};
 use crate::player::{rep_label, Class, Player};
@@ -74,7 +74,9 @@ impl Game {
         print!("Quel est ton nom, aventurier ? ");
         io::stdout().flush().ok();
         let mut name = String::new();
-        io::stdin().read_line(&mut name).map_err(|e| e.to_string())?;
+        io::stdin()
+            .read_line(&mut name)
+            .map_err(|e| e.to_string())?;
         let name = name.trim().to_string();
         let name = if name.is_empty() {
             "Héros".to_string()
@@ -163,7 +165,7 @@ impl Game {
     /// Avance le temps : 1 tour = ~1 unité ; jour/nuit alternent toutes les 5.
     fn tick(&mut self) {
         self.turn += 1;
-        let new_time = if (self.turn / 5) % 2 == 0 {
+        let new_time = if (self.turn / 5).is_multiple_of(2) {
             TimeOfDay::Day
         } else {
             TimeOfDay::Night
@@ -188,14 +190,16 @@ impl Game {
         if let Some(room) = self.world.room_mut(1) {
             if room.monsters.is_empty() {
                 if let Some(g) = &gobelin {
-                    room.monsters.push(crate::entity::MonsterInstance::from_template(g));
+                    room.monsters
+                        .push(crate::entity::MonsterInstance::from_template(g));
                 }
             }
         }
         if let Some(room) = self.world.room_mut(4) {
             if room.monsters.is_empty() {
                 if let Some(t) = &troll {
-                    room.monsters.push(crate::entity::MonsterInstance::from_template(t));
+                    room.monsters
+                        .push(crate::entity::MonsterInstance::from_template(t));
                 }
             }
         }
@@ -229,10 +233,14 @@ impl Game {
                 .monsters
                 .iter()
                 .filter_map(|inst| {
-                    self.world
-                        .monsters
-                        .get(&inst.id)
-                        .map(|m| format!("{} ({} PV){}", m.name, inst.hp, effects_summary(&inst.effects)))
+                    self.world.monsters.get(&inst.id).map(|m| {
+                        format!(
+                            "{} ({} PV){}",
+                            m.name,
+                            inst.hp,
+                            effects_summary(&inst.effects)
+                        )
+                    })
                 })
                 .collect();
             println!("MENACES : {}", names.join(", "));
@@ -337,9 +345,17 @@ impl Game {
     }
 
     fn show_score(&self) {
-        let time_str = if self.time == TimeOfDay::Day { "Jour" } else { "Nuit" };
+        let time_str = if self.time == TimeOfDay::Day {
+            "Jour"
+        } else {
+            "Nuit"
+        };
         println!("======== Résumé de partie ========");
-        println!("Aventurier         : {} le {}", self.player.name, self.player.class.label());
+        println!(
+            "Aventurier         : {} le {}",
+            self.player.name,
+            self.player.class.label()
+        );
         println!("Niveau atteint     : {}", self.player.stats.level);
         println!("Tours joués        : {} ({})", self.turn, time_str);
         println!("Monstres terrassés : {}", self.player.monsters_killed);
@@ -350,8 +366,10 @@ impl Game {
             self.player.reputation,
             rep_label(self.player.reputation)
         );
-        println!("Quêtes terminées   : {}",
-            self.player.quests.iter().filter(|q| q.done).count());
+        println!(
+            "Quêtes terminées   : {}",
+            self.player.quests.iter().filter(|q| q.done).count()
+        );
         println!("==================================");
     }
 
@@ -514,7 +532,10 @@ impl Game {
                 println!("Marchandises de {} :", m.name);
                 for id in &m.shop {
                     if let Some(item) = self.world.items.get(id) {
-                        println!("  - {} ({} or) : {}", item.name, item.value, item.description);
+                        println!(
+                            "  - {} ({} or) : {}",
+                            item.name, item.value, item.description
+                        );
                     }
                 }
                 false
@@ -546,9 +567,10 @@ impl Game {
             }
         };
         let item = merchant.shop.iter().find_map(|id| {
-            self.world.items.get(id).filter(|it| {
-                it.name.to_lowercase().starts_with(&lname) || it.id == lname
-            })
+            self.world
+                .items
+                .get(id)
+                .filter(|it| it.name.to_lowercase().starts_with(&lname) || it.id == lname)
         });
         match item.cloned() {
             Some(it) => {
@@ -610,8 +632,7 @@ impl Game {
         };
         let needle = name.to_lowercase();
         let idx = self.player.inventory.iter().position(|it| {
-            it.name.to_lowercase().starts_with(&needle)
-                || it.id.to_lowercase().starts_with(&needle)
+            it.name.to_lowercase().starts_with(&needle) || it.id.to_lowercase().starts_with(&needle)
         });
         let i = match idx {
             Some(i) => i,
@@ -685,10 +706,7 @@ impl Game {
             Some(r) => r,
             None => return false,
         };
-        let has_inn = room
-            .npcs
-            .iter()
-            .any(|id| id == "aubergiste");
+        let has_inn = room.npcs.iter().any(|id| id == "aubergiste");
         if !has_inn {
             println!("Tu ne peux te reposer qu'à l'auberge.");
             return false;
@@ -799,7 +817,10 @@ impl Game {
                 println!("Tu déchaînes {} dans le vide.", spell.name);
                 return true;
             }
-            println!("Un orage furieux s'abat ! {} déchaîne sa fureur.", spell.name);
+            println!(
+                "Un orage furieux s'abat ! {} déchaîne sa fureur.",
+                spell.name
+            );
             // Pré-calcul des noms (le borrow checker n'aime pas lire `world.monsters`
             // pendant qu'on tient une mut ref sur la salle).
             let monsters_catalog: std::collections::HashMap<String, String> = ids
@@ -884,9 +905,7 @@ impl Game {
                 self.world
                     .monsters
                     .get(&inst.id)
-                    .map(|m| {
-                        m.name.to_lowercase().starts_with(&target_name) || m.id == target_name
-                    })
+                    .map(|m| m.name.to_lowercase().starts_with(&target_name) || m.id == target_name)
                     .unwrap_or(false)
             })
         });
@@ -1033,10 +1052,7 @@ impl Game {
             {
                 if target == monster_id {
                     qp.progress += 1;
-                    println!(
-                        "  [Quête {}] {}/{}",
-                        q.title, qp.progress, count
-                    );
+                    println!("  [Quête {}] {}/{}", q.title, qp.progress, count);
                     if qp.progress >= *count {
                         qp.done = true;
                         completions.push(qp.id.clone());
@@ -1073,10 +1089,7 @@ impl Game {
                         .filter(|it| &it.id == target)
                         .count() as u32;
                     qp.progress = owned;
-                    println!(
-                        "  [Quête {}] {}/{}",
-                        q.title, qp.progress, count
-                    );
+                    println!("  [Quête {}] {}/{}", q.title, qp.progress, count);
                     if qp.progress >= *count {
                         qp.done = true;
                         completions.push(qp.id.clone());

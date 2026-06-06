@@ -94,9 +94,7 @@ pub const SPELLS: &[Spell] = &[
 pub fn find_spell(id_or_name: &str) -> Option<&'static Spell> {
     let needle = id_or_name.to_lowercase();
     SPELLS.iter().find(|s| {
-        s.id == needle
-            || s.id.starts_with(&needle)
-            || s.name.to_lowercase().starts_with(&needle)
+        s.id == needle || s.id.starts_with(&needle) || s.name.to_lowercase().starts_with(&needle)
     })
 }
 
@@ -218,7 +216,7 @@ mod tests {
         let mut p = Player::new("T".into());
         p.stats.intelligence = 10;
         let spell = find_spell("boule_de_feu").unwrap(); // power 3
-        // 10 * 3 / 2 + 5 = 20
+                                                         // 10 * 3 / 2 + 5 = 20
         assert_eq!(spell_damage(&p, spell), 20);
     }
 
