@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::entity::{Item, Recipe};
+use crate::entity::{Combattant, Item, Recipe, Vivant};
 use crate::quest::QuestProgress;
 
 /// Classe choisie en début de partie : oriente les stats de départ.
@@ -428,6 +428,24 @@ impl Player {
     }
 }
 
+impl Vivant for Player {
+    fn hp(&self) -> i32 {
+        self.stats.hp
+    }
+    fn max_hp(&self) -> i32 {
+        self.stats.max_hp
+    }
+}
+
+impl Combattant for Player {
+    fn attaque(&self) -> i32 {
+        self.attack_damage()
+    }
+    fn defense(&self) -> i32 {
+        Player::defense(self)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -654,5 +672,19 @@ mod tests {
         p.craft(&r, &cat).unwrap();
         assert_eq!(p.count_item("potion"), 1);
         assert_eq!(p.count_item("potion_grande"), 1);
+    }
+
+    #[test]
+    fn player_implemente_vivant_et_combattant() {
+        use crate::entity::{Combattant, Vivant};
+        let mut p = Player::new("T".into());
+        assert_eq!(p.hp(), p.stats.hp);
+        assert_eq!(p.max_hp(), p.stats.max_hp);
+        assert!(p.est_vivant());
+        // attaque = force + bonus arme (0 sans arme)
+        assert_eq!(Combattant::attaque(&p), p.stats.force as i32);
+        assert_eq!(Combattant::defense(&p), 0);
+        p.stats.hp = 0;
+        assert!(!p.est_vivant());
     }
 }

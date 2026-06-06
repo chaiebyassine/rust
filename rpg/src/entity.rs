@@ -2,6 +2,35 @@
 
 use serde::{Deserialize, Serialize};
 
+/// Trait commun à toute entité ayant des points de vie.
+pub trait Vivant {
+    fn hp(&self) -> i32;
+    fn max_hp(&self) -> i32;
+
+    fn est_vivant(&self) -> bool {
+        self.hp() > 0
+    }
+
+    /// Ratio PV / PV max, borné dans [0.0, 1.0].
+    fn pourcentage_vie(&self) -> f32 {
+        let max = self.max_hp().max(1) as f32;
+        (self.hp() as f32 / max).clamp(0.0, 1.0)
+    }
+}
+
+/// Trait pour les entités capables de combattre.
+pub trait Combattant: Vivant {
+    fn attaque(&self) -> i32;
+    fn defense(&self) -> i32;
+}
+
+/// Trait pour tout objet identifiable du jeu (items, recettes...).
+pub trait Objet {
+    fn id(&self) -> &str;
+    fn nom(&self) -> &str;
+    fn valeur(&self) -> u32;
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Item {
     pub id: String,
@@ -149,6 +178,47 @@ pub fn effects_summary(effects: &[StatusEffect]) -> String {
     format!(" [{}]", parts.join(", "))
 }
 
+impl Vivant for Monster {
+    fn hp(&self) -> i32 {
+        self.hp
+    }
+    fn max_hp(&self) -> i32 {
+        self.hp
+    }
+}
+
+impl Combattant for Monster {
+    fn attaque(&self) -> i32 {
+        self.attack
+    }
+    fn defense(&self) -> i32 {
+        0
+    }
+}
+
+impl Vivant for MonsterInstance {
+    fn hp(&self) -> i32 {
+        self.hp
+    }
+    /// L'instance ne porte pas le template ; on expose les PV courants
+    /// faute de mieux. Utilise `Monster::max_hp` quand le template est dispo.
+    fn max_hp(&self) -> i32 {
+        self.hp
+    }
+}
+
+impl Objet for Item {
+    fn id(&self) -> &str {
+        &self.id
+    }
+    fn nom(&self) -> &str {
+        &self.name
+    }
+    fn valeur(&self) -> u32 {
+        self.value
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -257,5 +327,67 @@ mod tests {
             defense_bonus: 0,
         };
         assert_eq!(it.sell_price(), 0);
+    }
+
+    fn monster_test(hp: i32, attack: i32) -> Monster {
+        Monster {
+            id: "test".into(),
+            name: "Test".into(),
+            hp,
+            attack,
+            xp: 0,
+            gold: 0,
+            drops: Vec::new(),
+        }
+    }
+
+    #[test]
+    fn vivant_monster_est_vivant_si_hp_positif() {
+        assert!(monster_test(10, 5).est_vivant());
+        assert!(!monster_test(0, 5).est_vivant());
+        assert!(!monster_test(-3, 5).est_vivant());
+    }
+
+    #[test]
+    fn vivant_pourcentage_vie_borne_entre_0_et_1() {
+        let m = monster_test(10, 0);
+        assert!((m.pourcentage_vie() - 1.0).abs() < f32::EPSILON);
+        let mut inst = MonsterInstance::from_template(&m);
+        inst.hp = 5;
+        // max_hp d'une instance = hp courant (best-effort), donc ratio = 1.0
+        assert!((inst.pourcentage_vie() - 1.0).abs() < f32::EPSILON);
+    }
+
+    #[test]
+    fn combattant_monster_expose_attaque_et_defense() {
+        let m = monster_test(20, 8);
+        assert_eq!(m.attaque(), 8);
+        assert_eq!(m.defense(), 0);
+    }
+
+    #[test]
+    fn objet_item_expose_id_nom_valeur() {
+        let it = Item {
+            id: "epee".into(),
+            name: "Épée".into(),
+            description: "".into(),
+            kind: "Weapon".into(),
+            value: 50,
+            heal: 0,
+            attack_bonus: 5,
+            defense_bonus: 0,
+        };
+        assert_eq!(it.id(), "epee");
+        assert_eq!(it.nom(), "Épée");
+        assert_eq!(it.valeur(), 50);
+    }
+
+    #[test]
+    fn vivant_via_dyn_dispatch() {
+        // Vérifie qu'on peut traiter Monster et MonsterInstance polymorphiquement.
+        let m = monster_test(15, 3);
+        let inst = MonsterInstance::from_template(&m);
+        let entites: Vec<&dyn Vivant> = vec![&m, &inst];
+        assert!(entites.iter().all(|e| e.est_vivant()));
     }
 }
