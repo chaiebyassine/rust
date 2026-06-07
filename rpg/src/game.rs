@@ -184,22 +184,22 @@ impl Game {
     }
 
     fn respawn_night(&mut self) {
-        // Réinjecte un gobelin dans la salle 1 et un troll dans la 4 si vide.
-        let gobelin = self.world.monsters.get("gobelin").cloned();
-        let troll = self.world.monsters.get("troll").cloned();
-        if let Some(room) = self.world.room_mut(1) {
-            if room.monsters.is_empty() {
-                if let Some(g) = &gobelin {
+        // Réinjecte un monstre dans chaque salle clé si elle est vide.
+        let spawns = [
+            (1u32, "gobelin"),
+            (4, "troll"),
+            (6, "chauve_souris"),
+            (7, "squelette"),
+        ];
+        for (room_id, monster_id) in spawns {
+            let tpl = match self.world.monsters.get(monster_id).cloned() {
+                Some(m) => m,
+                None => continue,
+            };
+            if let Some(room) = self.world.room_mut(room_id) {
+                if room.monsters.is_empty() {
                     room.monsters
-                        .push(crate::entity::MonsterInstance::from_template(g));
-                }
-            }
-        }
-        if let Some(room) = self.world.room_mut(4) {
-            if room.monsters.is_empty() {
-                if let Some(t) = &troll {
-                    room.monsters
-                        .push(crate::entity::MonsterInstance::from_template(t));
+                        .push(crate::entity::MonsterInstance::from_template(&tpl));
                 }
             }
         }
@@ -886,7 +886,7 @@ impl Game {
             }
             if !self.player.stats.is_alive() {
                 println!(">> Tu es mort... Game over.");
-                std::process::exit(0);
+                return true;
             }
             return true;
         }

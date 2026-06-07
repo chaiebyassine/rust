@@ -92,6 +92,7 @@ pub struct Monster {
 pub struct MonsterInstance {
     pub id: String,
     pub hp: i32,
+    pub max_hp: i32,
     #[serde(default)]
     pub effects: Vec<StatusEffect>,
 }
@@ -101,6 +102,7 @@ impl MonsterInstance {
         MonsterInstance {
             id: m.id.clone(),
             hp: m.hp,
+            max_hp: m.hp,
             effects: Vec::new(),
         }
     }
@@ -203,10 +205,8 @@ impl Vivant for MonsterInstance {
     fn hp(&self) -> i32 {
         self.hp
     }
-    /// L'instance ne porte pas le template ; on expose les PV courants
-    /// faute de mieux. Utilise `Monster::max_hp` quand le template est dispo.
     fn max_hp(&self) -> i32 {
-        self.hp
+        self.max_hp
     }
 }
 
@@ -357,8 +357,8 @@ mod tests {
         assert!((m.pourcentage_vie() - 1.0).abs() < f32::EPSILON);
         let mut inst = MonsterInstance::from_template(&m);
         inst.hp = 5;
-        // max_hp d'une instance = hp courant (best-effort), donc ratio = 1.0
-        assert!((inst.pourcentage_vie() - 1.0).abs() < f32::EPSILON);
+        // max_hp = 10 (du template), hp = 5 -> ratio = 0.5
+        assert!((inst.pourcentage_vie() - 0.5).abs() < f32::EPSILON);
     }
 
     #[test]
