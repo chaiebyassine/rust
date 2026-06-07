@@ -63,8 +63,8 @@ pub struct World {
 impl World {
     pub fn load() -> Result<Self, String> {
         let raw = include_str!("../../data/world.json");
-        let wf: WorldFile = serde_json::from_str(raw)
-            .map_err(|e| format!("JSON invalide : {}", e))?;
+        let wf: WorldFile =
+            serde_json::from_str(raw).map_err(|e| format!("JSON invalide : {}", e))?;
         let monsters: HashMap<String, Monster> =
             wf.monsters.into_iter().map(|m| (m.id.clone(), m)).collect();
         let rooms = wf

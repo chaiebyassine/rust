@@ -1,0 +1,219 @@
+{
+  "player": {
+    "name": "hero",
+    "class": "Mage",
+    "position": 0,
+    "stats": {
+      "force": 6,
+      "intelligence": 12,
+      "hp": 70,
+      "max_hp": 80,
+      "mana": 50,
+      "max_mana": 60,
+      "xp": 18,
+      "level": 1
+    },
+    "inventory": [
+      {
+        "id": "potion",
+        "name": "Potion de soin",
+        "description": "Restaure 20 PV.",
+        "kind": "Consumable",
+        "value": 10,
+        "heal": 20,
+        "attack_bonus": 0,
+        "defense_bonus": 0
+      },
+      {
+        "id": "griffe_loup",
+        "name": "Griffe de loup",
+        "description": "Une griffe acerée arrachée à un loup.",
+        "kind": "Material",
+        "value": 2,
+        "heal": 0,
+        "attack_bonus": 0,
+        "defense_bonus": 0
+      }
+    ],
+    "gold": 22,
+    "equipped_attack_bonus": 0,
+    "equipped_weapon": null,
+    "equipped_armor": null,
+    "spells": [
+      "boule_de_feu",
+      "soin"
+    ],
+    "quests": [],
+    "monsters_killed": 2,
+    "spells_cast": 1,
+    "reputation": 0
+  },
+  "rooms": {
+    "3": {
+      "id": 3,
+      "name": "Vieille auberge",
+      "description": "Une auberge chaleureuse, idéale pour se reposer.",
+      "exits": {
+        "north": 0
+      },
+      "items": [],
+      "npcs": [
+        "aubergiste"
+      ],
+      "monsters": []
+    },
+    "5": {
+      "id": 5,
+      "name": "Tour du mage",
+      "description": "Une haute tour aux murs couverts de runes. Un vieux sorcier feuillette un grimoire.",
+      "exits": {
+        "west": 1
+      },
+      "items": [],
+      "npcs": [
+        "sorcier"
+      ],
+      "monsters": []
+    },
+    "8": {
+      "id": 8,
+      "name": "Antre du Dragon Noir",
+      "description": "Une caverne immense, jonchée d'ossements. Une chaleur étouffante émane des profondeurs. Le Dragon Noir te fixe de ses yeux rougeoyants.",
+      "exits": {
+        "south": 7
+      },
+      "items": [
+        "epee_runique"
+      ],
+      "npcs": [],
+      "monsters": [
+        {
+          "id": "dragon_noir",
+          "hp": 150,
+          "effects": []
+        }
+      ]
+    },
+    "0": {
+      "id": 0,
+      "name": "Place du village",
+      "description": "Une place pavée, au coeur d'un petit village. Une fontaine murmure au centre.",
+      "exits": {
+        "east": 2,
+        "south": 3,
+        "north": 1
+      },
+      "items": [],
+      "npcs": [
+        "marchand"
+      ],
+      "monsters": []
+    },
+    "1": {
+      "id": 1,
+      "name": "Forêt sombre",
+      "description": "Les arbres sont si hauts qu'ils masquent presque le ciel. On entend des bruits étranges.",
+      "exits": {
+        "south": 0,
+        "north": 4,
+        "east": 5
+      },
+      "items": [],
+      "npcs": [],
+      "monsters": [
+        {
+          "id": "gobelin",
+          "hp": 20,
+          "effects": []
+        }
+      ]
+    },
+    "4": {
+      "id": 4,
+      "name": "Caverne",
+      "description": "Une caverne humide. L'écho de tes pas se mélange à des grognements.",
+      "exits": {
+        "north": 6,
+        "south": 1
+      },
+      "items": [
+        "tresor"
+      ],
+      "npcs": [],
+      "monsters": [
+        {
+          "id": "troll",
+          "hp": 50,
+          "effects": []
+        }
+      ]
+    },
+    "7": {
+      "id": 7,
+      "name": "Crypte oubliée",
+      "description": "Une crypte glaciale. Des squelettes patrouillent entre les tombes. Un esprit lumineux flotte près de l'autel.",
+      "exits": {
+        "north": 8,
+        "south": 6
+      },
+      "items": [
+        "potion_grande"
+      ],
+      "npcs": [
+        "esprit"
+      ],
+      "monsters": [
+        {
+          "id": "squelette",
+          "hp": 28,
+          "effects": []
+        },
+        {
+          "id": "squelette",
+          "hp": 28,
+          "effects": []
+        }
+      ]
+    },
+    "2": {
+      "id": 2,
+      "name": "Forge",
+      "description": "Une forge bruyante. Le forgeron tape sur une enclume rougie.",
+      "exits": {
+        "west": 0
+      },
+      "items": [
+        "epee"
+      ],
+      "npcs": [
+        "forgeron"
+      ],
+      "monsters": []
+    },
+    "6": {
+      "id": 6,
+      "name": "Galerie souterraine",
+      "description": "Des stalactites pendent du plafond. Des battements d'ailes résonnent dans l'obscurité.",
+      "exits": {
+        "south": 4,
+        "north": 7
+      },
+      "items": [],
+      "npcs": [],
+      "monsters": [
+        {
+          "id": "chauve_souris",
+          "hp": 12,
+          "effects": []
+        },
+        {
+          "id": "chauve_souris",
+          "hp": 12,
+          "effects": []
+        }
+      ]
+    }
+  },
+  "turn": 8,
+  "time": "Night"
+}
